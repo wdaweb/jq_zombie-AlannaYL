@@ -1,0 +1,144 @@
+html,
+body {
+  height: 100%;
+  padding: 0;
+  margin: 0;
+}
+
+@font-face {
+  font-family: 'Fusion Pixel';
+  src: url('./font/Fusion-Pixel-Regular.woff2') format('woff2'),
+    url('./font/Fusion-Pixel-Regular.woff') format('woff'),
+    url('./font/fusion-pixel.ttf') format('ttf');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+
+
+body {
+  font-family: 'Fusion Pixel';
+  background: url(./popcorn/Fondo-retro.jpg) no-repeat center / 100%;
+}
+
+.none {
+  display: none;
+}
+
+.block {
+  display: block;
+}
+
+.down {
+  z-index: 1;
+}
+
+#pop {
+  width: 800px;
+  height: 800px;
+  position: absolute;
+  top: 50%;
+  left: 51%;
+  transform: translate(-50%, -50%);
+  margin: auto;
+}
+
+
+.popcar {
+  /* background: paleturquoise; */
+  display: inline-block;
+  width: 800px;
+  height: 600px;
+  margin: auto;
+  padding-left: 10%;
+  z-index: 1;
+}
+
+.popcar img {
+  height: 800px;
+}
+
+#corn {
+  display: inline-block;
+  position: absolute;
+  width: 280px;
+  height: 230px;
+  top: 52%;
+  left: 52%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+}
+
+#corn img {
+  height: 200px;
+}
+
+#textInfo {
+  padding: 100px;
+  width: 200px;
+  height: 200px;
+  line-height: 1.5;
+  text-align: center;
+  position: relative;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 20px;
+  /* display: inline-block; */
+  z-index: 3;
+  /* background: rgba(255, 255, 255, 0.5); */
+}
+
+#textInfo h2 {
+  color: rgba(1, 89, 101);
+}
+
+#textInfo span {
+  color: rgba(1, 89, 101);
+}
+
+#textInfo .textP {
+  color: #d9463e;
+}
+
+#text {
+  width: 300px;
+  height: 320px;
+  line-height: 1.8;
+  font-size: 24px;
+  text-align: center;
+  position: fixed;
+  top: 35%;
+  left: 100px;
+  transform: translate(0, -10px);
+  border-radius: 20px;
+  z-index: 1;
+  color: rgb(243, 229, 169);
+  background: rgba(1, 89, 101, 0.5);
+  box-shadow: 0 0 5px rgba(1, 89, 101);
+}
+
+#btn-start {
+  position: absolute;
+  left: 50%;
+  bottom: 35%;
+  transform: translateX(-50%);
+  z-index: 3;
+  box-shadow:
+    0px 0px 5px rgba(217, 70, 62, 0.8),
+    0px 0px 10px rgba(217, 70, 62, 0.5),
+    0px 0px 15px #f2e9c0;
+  border: none;
+  border-radius: 10px;
+  width: 75px;
+  height: 30px;
+  margin-top: 10px;
+  background: #d9463e;
+  color: #f2e9c0;
+  font-size: 14px;
+}
+
+#btn-start:hover {
+  cursor: pointer;
+}

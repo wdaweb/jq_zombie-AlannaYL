@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>popcorn</title>
+  <link rel="stylesheet" href="./popcorn.css">
+
+</head>
+
+<body>
+  <div id="text" class="none">
+    <!-- 時間 -->
+    <p>剩餘：<span id="text-time">0</span>秒</p>
+    <!-- 分數 -->
+    <p>你爆了<span id="text-socre">0</span>顆爆米花</p>
+    <p>爆米花大師: <span id="text-heightscorename">沒有</span></p>
+    <p>最多有<span id="text-heightscore">0</span>顆爆米花</p>
+  </div>
+
+  <div id="textInfo">
+    <h2>遊戲說明</h2>
+    <span>
+      魔法爆米花車車現身！<br>
+      <span class="textP">點擊玉米可炸出爆米花</span><br>
+      炸越多爆米花<br>
+      誰就是爆米花大師！
+    </span>
+  </div>
+  <!-- 開始按鈕 -->
+  <button id="btn-start">開始</button>
+
+  <!-- 遊戲場景 -->
+  <div id="pop" class="none">
+    <!-- 只是背景 -->
+    <div class="popcar"><img draggable="false" src="./popcorn/popcorncarbig.gif" alt="爆米花車車"></div>
+    <!-- 點擊爆米花 -->
+    <div id="corn"><img draggable="false" src="./popcorn/cornbig01.png" alt="玉米"></div>
+  </div>
+  <script src="./jquery-3.6.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script>
+    // 分數
+    let score = 0
+
+    // 剩餘時間
+    let countdown = 0
+
+    // 計時器
+    let timer = 0
+
+    // 滑鼠點擊次數
+    let clicknum = 0
+
+    // 最高分玩家紀錄提取
+    const heightscore = localStorage.popcorngame ? JSON.parse(localStorage.popcorngame) : { name: '', score: 0 }
+    $('#text-heightscorename').text(heightscore.name)
+    $('#text-heightscore').text(heightscore.score)
+    // 開始遊戲
+    $('#btn-start').click(function () {
+      // 停用按鈕
+      $(this).attr('disabled', true)
+      $(this).hide()
+      // 遊戲出現
+      $('#pop').removeClass('none')
+      // 遊戲說明消失
+      $('#textInfo').addClass('none')
+      // 計分出現
+      $('#text').removeClass('none')
+      // 設定分數，時間
+      score = 0
+      $('#text-socre').text(score)
+      countdown = 10
+      $('#text-time').text(countdown)
+
+      // 遊戲時間
+      timer = setInterval(() => {
+        // 倒數時間
+        countdown--
+        $('#text-time').text(countdown)
+
+        // 遊戲時間結束
+        if (countdown === 0) {
+          // 停止倒數
+          clearInterval(timer)
+          // 爆米花清空
+          $('.popcorn').remove()
+          // 可以再次點擊開始按鈕
+          $('#btn-start').attr('disabled', false)
+          $('#btn-start').show()
+
+          if (score > heightscore.score) {
+            Swal.fire({
+              icon: 'info',
+              title: '時間到',
+              text: `你爆了 ${score} 顆玉米`,
+              inputPlaceholder: '請輸入名字',
+              input: 'text',
+              inputAttributes: {
+                required: true
+              },
+              validationMessage: '名稱必填',
+              allowOutsideClick: false,
+              allowEscapeKey: false
+            }).then(result => {
+              heightscore.score = score
+              heightscore.name = result.value
+              $('#text-heightscorename').text(heightscore.name)
+              $('#text-heightscore').text(heightscore.score)
+              localStorage.popcorngame = JSON.stringify(heightscore)
+            })
+          } else {
+            Swal.fire({
+              icon: 'info',
+              title: '時間到',
+              text: `你得到${score}分`,
+              confirmButtonColor: '#d9463e',
+              iconColor: 'rgba(1, 89, 101)',
+            })
+          }
+        }
+      }, 1000)
+    })
+
+
+    // 當按鈕停用可以點擊爆米花，計分
+    if ($('#btn-start').attr('disabled') !== false) {
+
+      // 點玉米炸爆米花
+      $('#corn').click(function () {
+        // 圖片變換
+        $('#corn img').attr("src", "./popcorn/cornbig.gif")
+
+        //  時間停止，不可以再炸爆米花
+        if (countdown === 0) {
+          // 點擊次數歸零
+          clicknum = 0
+          $('#corn img').attr('src', './popcorn/cornbig02.png')
+          return
+        }
+        // 炸爆米花，滑鼠點擊次數計算，大於10下，可以產生1顆爆米花(score)
+        clicknum++
+        console.log('滑鼠次數' + clicknum)
+        // 點擊次數要除10整除(10的倍數) 每點10次+1分
+        if (clicknum % 10 == 0) {
+          score++
+          $('#text-socre').text(score)
+          console.log('產生爆米花' + score)
+        }
+        // 爆米花出現
+        const popcornTop = Math.round(Math.random() * 100) + '%'
+        const popcornLeft = Math.round(Math.random() * 100) + '%'
+        //爆米花出現
+        const popcorn = $(`
+                                <img src="./popcorn/popcorn.png" 
+                                class="popcorn" 
+                                style="width: 50px;height: 50px;
+                                top: ${popcornTop};left: ${popcornLeft};
+                                position:absolute
+                                ">`)
+        // 每當分數+1，我的爆米花圖片就+1
+        for (let i = 0; i < score; i++) {
+          $('.popcar').append(popcorn)
+          popcorn.animate({ top: `-=200px` }, 100).animate({ top: `+=300px` }, 1000)
+        }
+      })
+    }
+
+  </script>
+</body>
+
+</html>
